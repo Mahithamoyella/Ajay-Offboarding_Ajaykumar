@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./Frontend
+    container_name: ajay_offboarding_ajaykumar_frontend
+    ports:
+      - "8077:80"
+    depends_on:
+      - backend
+
+  hr_page:
+    build: ./Hr_page
+    container_name: ajay_offboarding_ajaykumar_hr_page
+    ports:
+      - "8078:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./Backend
+    container_name: ajay_offboarding_ajaykumar_backend
+    ports:
+      - "3064:3064"
+    depends_on:
+      - postgres
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=admin834
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=new_employee_db
+
+  postgres:
+    image: postgres:14
+    container_name: ajay_offboarding_ajaykumar_postgres
+    ports:
+      - "5462:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin834
+      POSTGRES_DB: new_employee_db
+    volumes:
+      - pgdata_ajay_offboarding_ajaykumar:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pgdata_ajay_offboarding_ajaykumar:
+
